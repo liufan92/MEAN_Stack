@@ -1,0 +1,149 @@
+#mySite {
+  padding:0px;
+}
+
+.navbar-fixed-top {
+  opacity:0.85;
+}
+
+#logo{
+	float: left;
+	height: 22px;
+	font-size: 18px;
+	line-height: 20px;
+	margin: 15px 15px;
+	
+}
+
+.my-nav-bar > li{
+	 font-family:cabin sketch;
+	 font-size: 20px;
+}
+
+.homeTitle {
+  background:url(/image/paint.jpg);
+  background-size:cover;
+  background-position:center;
+  height:300px;
+}
+
+@media (max-width:767px) {
+  .homeTitle {
+    height:200px;
+  }
+}
+
+.homeTitle > h1 {
+  font-family:cabin sketch;
+  font-size:90px;
+  color:white;
+  letter-spacing:10px;
+  text-align:center;
+  margin:0px;
+  padding-top:80px;
+}
+
+@media (max-width:767px) {
+  .homeTitle > h1 {
+    font-size:45px;
+    letter-spacing:10px;
+    padding-top:100px;
+  }
+}
+
+.homeTitle > p {
+  font-family:cabin sketch;
+  text-align:center;
+  color:white;
+  font-size:26px;
+  font-style:italic;
+}
+
+@media (max-width:767px) {
+  .homeTitle > p {
+    font-size:17px;
+  }
+}
+
+.row {
+  margin:0px;
+}
+
+.aboutMe {
+  font-family:fantasy;
+  padding:15% 0px;
+}
+
+.aboutMeImage {
+  padding:0px;
+}
+
+.aboutMeImage > img {
+  width:100%;
+}
+
+.placesPageContent {
+  margin-top:60px;
+  max-height:580px;
+  overflow:hidden;
+}
+
+.searchBar {
+  border-radius:7px;
+  padding:5px 10px;
+  margin-bottom:15px;
+  float:right;
+}
+
+.resultDiv {
+  padding:12px 16px;
+  border-radius:15px;
+  background:rgba(255,255,255,0.6);
+  max-height:585px;
+  overflow-y:auto;
+}
+
+.resultItem {
+  background:rgba(205,219,234,0.8);
+  border-radius:10px;
+  margin-top:3px;
+}
+
+.resultImage {
+  padding:5%;
+}
+
+.resultContent > h4 {
+  margin-top:20px;
+}
+
+.resultContent > p {
+  font-size:12px;
+  overflow:hidden;
+}
+
+.line-clamp {
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+}
+
+.addNewDiv {
+  background:rgba(205,219,234,0.8);
+  padding:20px 30px;
+  border-radius:12px;
+}
+
+.aboutDiv {
+  height:100%;
+}
+
+.aboutMeParagraph {
+  background:rgba(255,255,255,0.6);
+  font-family:cabin sketch;
+  font-size:27px;
+  padding:3%;
+  border-radius:10px;
+  margin-top:5%;
+}
+
