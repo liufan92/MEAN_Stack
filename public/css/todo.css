@@ -1,6 +1,6 @@
 .toDoBanner {
   height:300px;
-  background:url(../../assets/img/schedule.jpg);
+  background:url(/image/schedule.jpg);
   background-size:cover;
   background-position:50%;
 }

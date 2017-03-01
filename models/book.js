@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
-
-//Genre Schema
-var bookSchema = mongoose.Schema({
+mongoose.Promise = global.Promise;
+bookstoreConn = mongoose.createConnection('mongodb://localhost/bookstore');
+//Book Schema
+var bookSchema = new mongoose.Schema({
 	title:{
 		type: String,
 		required: true
@@ -28,8 +29,8 @@ var bookSchema = mongoose.Schema({
 	}
 });
 
-var Book = mongoose.model('Book', bookSchema);
-
+//var Book = mongoose.model('Book', bookSchema);
+var Book = bookstoreConn.model('Book', bookSchema);
 module.exports = Book;
 
 //Get Genres

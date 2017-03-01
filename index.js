@@ -10,9 +10,13 @@ var ObjectId = mongojs.ObjectId;
 
 ////Interact MongoDB with Mongoose 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/bookstore');
+//mongoose.connect('mongodb://localhost/bookstore');
+//mongoose.connect('mongodb://localhost/mypostit');
+//mongoose.createConnection('mongodb://localhost/bookstore');
 Genre = require('./models/genre');
 Book = require('./models/book');
+Postit = require('./models/postit');
+PostitItem = require('./models/postit_item');
 
 var app = express();
 
@@ -101,7 +105,7 @@ app.delete('/users/delete/:id', function(req,res){
 	}})
 });
 
-//Interact MongoDB with MongoJS
+//Interact MongoDB with Mongoose
 app.get('/api/genres', function(req, res){
 	Genre.getGenres(function(err,genres){
 		if (err){
@@ -208,6 +212,122 @@ app.delete('/api/books/:_id', function(req, res){
 		}
 	})
 });
+
+//--TODO with MONGO--//
+app.get('/api/todo/postits/:_owner',function(req, res){
+	Postit.getPostits(req.params._owner, function(err, postits){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postits);
+		}
+	});
+});
+
+app.put('/api/todo/postit/:_id', function(req, res){
+	var postitId = req.params._id;
+	var updateInfo = req.body;
+
+	Postit.updatePostit(postitId, updateInfo, {}, function(err, postit){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postit);
+		}
+	})
+
+});
+
+app.post('/api/todo/postit',function(req,res){
+	var postit = req.body;
+	Postit.addPostit(postit, function(err, postit){
+		if(err){	
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postit);
+		};
+	});
+});
+
+app.delete('/api/todo/postit/:_id',function(req, res){
+	var id = req.params._id;
+	Postit.deletePostit(id, function(err, postit){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postit);
+		};
+	});
+});
+
+app.get('/api/todo/postits/:postitId/items', function(req, res){
+	var id = req.params.postitId;
+	PostitItem.getPostitItems(id, function(err, postitItems){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postitItems);
+		}
+	});
+});
+
+app.post('/api/todo/postits/:postitId/items', function(req, res){
+	var newPostitItem = req.body;
+	PostitItem.addPostitItem(newPostitItem, function(err, postitItems){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postitItems);
+		}
+	});
+});
+
+app.put('/api/todo/postits/:postitId/items/:_itemId', function(req, res){
+	var itemId = req.params._itemId;
+	var updatePostitItem = req.body;
+
+	PostitItem.updatePostitItem(itemId, updatePostitItem, function(err, postitItems){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postitItems);
+		}
+	});
+});
+
+app.delete('/api/todo/postits/:postitId/items/:itemId', function(req, res){
+	var itemId = req.params.itemId;
+	console.log('removing itemId: '+ itemId)
+	PostitItem.deletePostitItem(itemId, function(err, postitItem){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postitItem);
+		}
+	});
+});
+
+app.delete('/api/todo/postits/:postitId/items', function(req, res){
+	var postitId = req.params.postitId;
+	PostitItem.clearPostitItems(postitId, function(err, postitItems){
+		if(err){
+			throw err;
+			res.status(500).send();
+		}else{
+			res.json(postitItems);
+		}
+	});
+});
+
+
 
 app.listen(3000,function(){
 	console.log('Listening on port 3000...');
