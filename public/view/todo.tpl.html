@@ -1,0 +1,15 @@
+<div class="container-fluid" id="mySite">
+    <div class="toDoBanner"></div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12" ng-repeat="postit in postits">
+            <div class="toDoItem" id="{{postit._id}}">
+                <h5>{{postit.title}}<button class="btn btn-default btn-xs doDoItemButton" type="button"> <i class="glyphicon glyphicon-remove" ng-click=deleteNote(postit)></i></button><button class="btn btn-default btn-xs doDoItemButton" type="button" ng-click=showList(postit)> <i class="glyphicon glyphicon-tag"></i></button></h5>
+                <hr>
+                <p>{{postit.description}}</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+            <a ng-click=newNote() class="addItem"> <i class="glyphicon glyphicon-plus"></i></a>
+        </div>
+    </div>
+</div>
