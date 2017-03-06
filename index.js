@@ -1,7 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
+var jwt = require('express-jwt');
 var expressValidator = require('express-validator');
+var cors = require('cors');
+
 
 //Interact MongoDB with MongoJS
 var mongojs = require('mongojs');
@@ -11,8 +14,7 @@ var ObjectId = mongojs.ObjectId;
 ////Interact MongoDB with Mongoose 
 var mongoose = require('mongoose');
 //mongoose.connect('mongodb://localhost/bookstore');
-//mongoose.connect('mongodb://localhost/mypostit');
-//mongoose.createConnection('mongodb://localhost/bookstore');
+
 Genre = require('./models/genre');
 Book = require('./models/book');
 Postit = require('./models/postit');
@@ -24,12 +26,14 @@ var app = express();
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname,'views'));
 
+//Allow Cross Origin Resource Sharing
+app.use(cors());
 // Body Parser Middleware
 app.use(bodyParser.json()); //Handle parsing JSON content
 app.use(bodyParser.urlencoded({extended:false}));
-
 //Set Static Path
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 //Global variables
 app.use(function(req,res,next){
@@ -55,7 +59,14 @@ app.use(expressValidator({
   }
 }));
 
-//Handle GET request
+var authCheck = jwt({
+	//secret: new Buffer('fam8oGxd46ebhs7Ybo0NUodlwjIagvtW4wWDCB29rv7fdpHqzqy6_Ks-wbUkMLu7','base64'),
+	secret: 'fam8oGxd46ebhs7Ybo0NUodlwjIagvtW4wWDCB29rv7fdpHqzqy6_Ks-wbUkMLu7',
+	audience: 'lgGpyZ1zbHRNFpX8uJTpS4apngAJLhky'
+});
+
+
+//Handle GET request with MongoJS
 app.get('/',function(req,res){
 	//res.json(person);
 	db.users.find(function (err, docs) {
@@ -214,7 +225,7 @@ app.delete('/api/books/:_id', function(req, res){
 });
 
 //--TODO with MONGO--//
-app.get('/api/todo/postits/:_owner',function(req, res){
+app.get('/api/todo/postits/:_owner', authCheck, function(req, res){
 	Postit.getPostits(req.params._owner, function(err, postits){
 		if(err){
 			throw err;
@@ -225,7 +236,7 @@ app.get('/api/todo/postits/:_owner',function(req, res){
 	});
 });
 
-app.put('/api/todo/postit/:_id', function(req, res){
+app.put('/api/todo/postit/:_id', authCheck, function(req, res){
 	var postitId = req.params._id;
 	var updateInfo = req.body;
 
@@ -240,7 +251,7 @@ app.put('/api/todo/postit/:_id', function(req, res){
 
 });
 
-app.post('/api/todo/postit',function(req,res){
+app.post('/api/todo/postit', authCheck, function(req,res){
 	var postit = req.body;
 	Postit.addPostit(postit, function(err, postit){
 		if(err){	
@@ -252,7 +263,7 @@ app.post('/api/todo/postit',function(req,res){
 	});
 });
 
-app.delete('/api/todo/postit/:_id',function(req, res){
+app.delete('/api/todo/postit/:_id', authCheck, function(req, res){
 	var id = req.params._id;
 	Postit.deletePostit(id, function(err, postit){
 		if(err){
@@ -264,7 +275,7 @@ app.delete('/api/todo/postit/:_id',function(req, res){
 	});
 });
 
-app.get('/api/todo/postits/:postitId/items', function(req, res){
+app.get('/api/todo/postits/:postitId/items', authCheck, function(req, res){
 	var id = req.params.postitId;
 	PostitItem.getPostitItems(id, function(err, postitItems){
 		if(err){
@@ -276,7 +287,7 @@ app.get('/api/todo/postits/:postitId/items', function(req, res){
 	});
 });
 
-app.post('/api/todo/postits/:postitId/items', function(req, res){
+app.post('/api/todo/postits/:postitId/items', authCheck, function(req, res){
 	var newPostitItem = req.body;
 	PostitItem.addPostitItem(newPostitItem, function(err, postitItems){
 		if(err){
@@ -288,7 +299,7 @@ app.post('/api/todo/postits/:postitId/items', function(req, res){
 	});
 });
 
-app.put('/api/todo/postits/:postitId/items/:_itemId', function(req, res){
+app.put('/api/todo/postits/:postitId/items/:_itemId', authCheck, function(req, res){
 	var itemId = req.params._itemId;
 	var updatePostitItem = req.body;
 
@@ -302,7 +313,7 @@ app.put('/api/todo/postits/:postitId/items/:_itemId', function(req, res){
 	});
 });
 
-app.delete('/api/todo/postits/:postitId/items/:itemId', function(req, res){
+app.delete('/api/todo/postits/:postitId/items/:itemId', authCheck, function(req, res){
 	var itemId = req.params.itemId;
 	console.log('removing itemId: '+ itemId)
 	PostitItem.deletePostitItem(itemId, function(err, postitItem){
@@ -315,7 +326,7 @@ app.delete('/api/todo/postits/:postitId/items/:itemId', function(req, res){
 	});
 });
 
-app.delete('/api/todo/postits/:postitId/items', function(req, res){
+app.delete('/api/todo/postits/:postitId/items', authCheck, function(req, res){
 	var postitId = req.params.postitId;
 	PostitItem.clearPostitItems(postitId, function(err, postitItems){
 		if(err){

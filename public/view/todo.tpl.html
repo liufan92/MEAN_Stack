@@ -1,6 +1,10 @@
 <div class="container-fluid" id="mySite">
     <div class="toDoBanner"></div>
-    <div class="row">
+    <toolbar></toolbar>
+    <div ng-if="!toolbar.auth.isAuthenticated">
+        <h3>Welcome! Please Sign In To Access TODO APP</h3>
+    </div>
+    <div class="row" ng-if="toolbar.auth.isAuthenticated">
         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12" ng-repeat="postit in postits">
             <div class="toDoItem" id="{{postit._id}}">
                 <h5>{{postit.title}}<button class="btn btn-default btn-xs doDoItemButton" type="button"> <i class="glyphicon glyphicon-remove" ng-click=deleteNote(postit)></i></button><button class="btn btn-default btn-xs doDoItemButton" type="button" ng-click=showList(postit)> <i class="glyphicon glyphicon-tag"></i></button></h5>

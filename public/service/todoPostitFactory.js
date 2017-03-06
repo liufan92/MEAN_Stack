@@ -17,6 +17,7 @@ angular
 			var deferred = $q.defer();
 			$http.get("/api/todo/postits/"+_username)
 			.then(function(data){
+				console.log(data);
 				deferred.resolve(data);
 			}
 			,function(err){

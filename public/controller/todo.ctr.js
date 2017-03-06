@@ -1,23 +1,27 @@
 angular
 	.module("myApp")
 	//.controller('todoCtrl', function($scope, $http, ModalService, AuthenticationService, $state){
-	.controller('TodoController', function($scope, $http, ModalService, todoPostitFactory/*, store*/){
-	todoPostitFactory.setUsername('Mike');
+	.controller('TodoController', function($scope, $http, ModalService, todoPostitFactory, store, $location, $state){
+	
+	var token = store.get('id_token');
+	var profile = store.get('profile');
+
+	if (token) {
+		$scope.profile = store.get('profile');
+		todoPostitFactory.setUsername($scope.profile.user_id.substr($scope.profile.user_id.indexOf("|") + 1)); 
+		console.log(todoPostitFactory.getUsername());
+	}else{
+		$state.go('login');
+		return;
+	};
 
 	todoPostitFactory
 	.getAllItems()
 	.then(function(result){
 		$scope.postits = result.data;
-		console.log(result.data);
+		//console.log(result.data);
 	});
 
-	//$scope.profile = store.get('profile');
-	//todoPostitFactory.setUsername($scope.profile.user_id.substr($scope.profile.user_id.indexOf("|") + 1)); 
-	
-	//console.log($scope.profile.user_id.substr($scope.profile.user_id.indexOf("|") + 1));
-	var UID = todoPostitFactory.getUsername();
-
-	console.log(UID);
 	$scope.newNote = function(){
 		ModalService.showModal({
 			templateUrl: "view/todoPostit.tpl.html",
